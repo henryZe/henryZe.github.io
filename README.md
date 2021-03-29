@@ -4,13 +4,13 @@
 
 ## Daily Coding
 
-[leecode daily 190](./code/190_reverseBits.c)
+[leecode daily 190](./code/190_reverseBits.md)
 
 ## Online Courses
 
 ### MOOC 数据结构 by 浙江大学 陈越
 
-[习题 03-树2 List Leaves](./code/2_listLeaves.c)
+[习题 03-树2 List Leaves](./code/2_listLeaves.md)
 
 ## Open Source
 

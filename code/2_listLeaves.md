@@ -1,3 +1,5 @@
+~~~ C
+
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -141,3 +143,5 @@ int main(void)
 {
     return level_order(create_tree());
 }
+
+~~~

@@ -1,3 +1,5 @@
+~~~ C
+
 #include <stdio.h>
 
 // 分治法
@@ -23,3 +25,5 @@ int main(void)
 
     return 0;
 }
+
+~~~
