@@ -30,8 +30,7 @@ Sample Output:
 4 1 5
 ~~~
 
-~~~ C
-
+~~~ c
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>

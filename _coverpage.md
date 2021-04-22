@@ -11,4 +11,5 @@
 - Daily Coding
 - Online Courses Note
 
-[Get Started](#_summary)
+[GitHub](https://github.com/henryZe)
+[Get Started](./_sidebar)
