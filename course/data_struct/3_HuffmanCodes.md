@@ -69,7 +69,7 @@ No
 No
 ~~~
 
-~~~ C
+~~~ c
 #include <limits.h>
 #include <stdbool.h>
 #include <stdlib.h>

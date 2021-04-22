@@ -110,7 +110,7 @@ g:
 * The `iret` instruction pops the return instruction pointer, return code segment selector, and EFLAGS image from the stack to the `EIP`, `CS`, and `EFLAGS` registers, respectively, and then resumes execution of the interrupted program or procedure.
 * If the return is to another privilege level, the `IRET` instruction also pops the `stack pointer` and `SS` from the stack, before resuming program execution.
 
-~~~ C
+~~~ c
 struct Trapframe {
     struct PushRegs tf_regs;
 
@@ -138,7 +138,7 @@ struct Trapframe {
 
 * packed: 数据结构不作对齐处理
 
-~~~ C
+~~~ c
 struct File {
     char f_name[5];
     int f_size;

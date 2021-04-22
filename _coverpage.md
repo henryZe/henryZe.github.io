@@ -1,10 +1,8 @@
-<!-- _coverpage.md -->
-
-![logo](_media/icon.svg)
+![logo](_media/cover.jpg ':size=15%')
 
 # Henry is speaking
 
-> Welcome to my Channel!
+> Zeng Heng's Blog
 
 - Open Sources Project
 - Technical Blogs
