@@ -10,4 +10,4 @@
 - Online Courses Note
 
 [GitHub](https://github.com/henryZe)
-[Get Started](./_sidebar)
+[Get Started](./README)
