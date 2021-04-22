@@ -9,6 +9,7 @@
 </head>
 <body>
   <div id="app">Loading...</div>
+
   <script>
     window.$docsify = {
       name: 'Zeng Heng\'s Blog',
@@ -17,11 +18,25 @@
       coverpage: '_coverpage.md',
       loadSidebar: true,
       loadSidebar: '_sidebar.md',
+
+      count:{
+        countable:true,
+        fontsize:'0.9em',
+        color:'rgb(90,90,90)',
+        language:'chinese'
+      }
     }
   </script>
+
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.js"></script>
+
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.js"></script>
+
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-c.js"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code"></script>
+  <script src="//unpkg.com/docsify-count/dist/countable.js"></script>
 </body>
 </html>
