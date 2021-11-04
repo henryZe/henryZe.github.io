@@ -6,8 +6,9 @@
 
 - Open Sources Project
 - Technical Blogs
+- Reading Notes
+- Online Courses
 - Daily Coding
-- Online Courses Note
 
 [GitHub](https://github.com/henryZe)
 [Get Started](./README)
