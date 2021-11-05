@@ -195,7 +195,41 @@ bne x5，x0，Exit ＃如果 x5！= 0，则跳转到 Exit
 
 RV32F 还提供了将数据从 f 寄存器（fmv.x.w）移动到 x 寄存器的指令，以及反方向移动数据的指令（fmv.w.x）。
 
+## 6 原子指令
 
+### 6.1 导言
 
+RV32A 有两种类型的原子操作：
+1. atomic memory operation
+2. load reserved / store conditional (lr/sc)
 
+![a_ins](./6th/a_ins.png)
 
+**compare-and-swap 操作：**
+> 比较一个寄存器中的值和另一个寄存器中的内存地址指向的值，如果它们相等，将第三个寄存器中的值和内存中的值进行交换。这是一条通用的同步原语。
+
+加载保留和条件存储只需要两个源寄存器，用它们可以实现原子的比较交换。用 `lr/sc` 实现内存字 M[a0] 的比较-交换操作:
+~~~ asm
+# Compare-and-swap (CAS) memory word M[a0] using lr/sc.
+# Expected old value in a1; desired new value in a2.
+0x00: lr.w a3, (a0)     # load old value
+0x04: bne a3, a1, 0x80  # old value equals a1?
+0x08: sc.w a3, a2, (a0) # swap in new value if so
+0x0c: bnez a3, 0x0      # retry if store failed
+    ... code following successful CAS goes here ...
+0x80:                   # unsuccessful CAS
+~~~
+
+**内存一致性模型**
+RISC-V 具有宽松的内存一致性模型（relaxed memory consistency model），因此其他线程看到的内存访问可以是乱序的。图 6.2 中，所有的 RV32A 指令都有一个请求位（`aq`）和一个释放位（`rl`）。`aq` 被置位的原子指令保证其它线程在随后的内存访问中看到顺序的 AMO 操作；`rl` 被置位的原子指令保证其它线程在此之前看到顺序的原子操作。
+
+~~~ asm
+# Critical section guarded by test-and-set spinlock using an AMO.
+0x00: li t0, 1                  # initialize lock value
+0x04: amoswap.w.aq t1, t0, (a0) # attempt to acquire lock
+0x08: bnez t1, 0x4              # retry if unsuccessful
+    ... critical section goes here ...
+0x20: amoswap.w.rl x0, x0, (a0) # release lock
+~~~
+
+## 7 压缩指令
