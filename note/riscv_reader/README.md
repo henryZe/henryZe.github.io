@@ -411,9 +411,30 @@ RV64 和 RV32 之间基本是超集关系，但是有一个例外是压缩指令
 
 ![p_ins](./10th/p_ins.png)
 
-### 10.2 简单嵌入式系统的机器模式
+`wfi` 通知处理器目前没有任何有用的工作，所有它应该进入低功耗模式，直到任何使能有效的中断等待处理，即 `mie & mip ≠ 0`。
 
+**wfi 不论全局中断使能有效与否都有用**
+> 如果在全局中断使能有效（mstatus.MIE = 1）时执行 wfi，然后有一个使能有效的中断等待执行，则处理器跳转到异常处理程序。另一方面，如果在全局禁用中断时执行 wfi，接着一个使能有效的中断等待执行，那么处理器继续执行 wfi 之后的代码。
 
+### 10.4 嵌入式系统中的用户模式和进程隔离
+
+用户模式（U 模式）拒绝使用这些功能，并在尝试执行 M 模式指令或访问 CSR 的时候产生非法指令异常。
+
+实现了 M 和 U 模式的处理器具有一个叫做物理内存保护（PMP，Physical Memory Protection）的功能，允许 M 模式指定 U 模式可以访问的内存地址。
+
+* PMP entries are statically prioritized. The lowest-numbered PMP entry that matches any byte of an access determines whether that access succeeds or fails.
+* The matching PMP entry must match all bytes of an access, or the access fails, irrespective of the L, R, W, and X bits.
+> For example, if a PMP entry is configured to match the four-byte range 0xC–0xF, then an 8-byte access to the range 0x8–0xF will fail, assuming that PMP entry is the highest-priority entry that matches those addresses.
+
+* If no PMP entry matches an M-mode access, the access succeeds. (blacklist mechanism)
+* If no PMP entry matches an S-mode or U-mode access, but at least one PMP entry is implemented, the access fails. (whitelist mechanism)
+> If at least one PMP entry is implemented, but all PMP entries’ A fields are set to OFF, then all S-mode and U-mode memory accesses will fail.
+
+### 10.5 现代操作系统的监管者模式
+
+S 模式比 U 模式权限更高，但比 M 模式低。与 U 模式一样，S 模式下运行的软件不能使用 M 模式的 CSR 和指令，并且受到 PMP 的限制。
+
+`mideleg`（Machine Interrupt Delegation，机器中断委托）CSR 控制将哪些中断委托给 S 模式。mideleg[5]对应于 S 模式的时钟中断，如果把它置位，S 模式的时钟中断将会移交 S 模式的异常处理程序，而不是 M 模式的异常处理程序。
 
 ## 11 RISC-V 未来的可选扩展
 
