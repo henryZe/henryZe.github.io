@@ -469,9 +469,9 @@ va 到 pa 转换的完整算法:
 4. Otherwise, the PTE is valid. If `pte.r` = 1 or `pte.x` = 1, go to step 5. Otherwise, this PTE is a pointer to the next level of the page table. Let `i` = `i` - 1. If `i` < 0, stop and raise a page-fault exception. Otherwise, let `a` = `pte.ppn` * PAGESIZE and go to step 2.
 5. A leaf PTE has been found. Determine if the requested memory access is allowed by the `pte.r`, `pte.w`, `pte.x`, and `pte.u` bits, given the current privilege mode and the value of the `SUM` and `MXR` fields of the `mstatus` register. If not, stop and raise a page-fault exception.
 6. If `i` > 0 and `pa.ppn[i-1:0]` != 0, this is a misaligned superpage; stop and raise a page-fault exception.
-7. If `pte.a` = 0, or if the memory access is a store and `pte.d` = 0, then either:
-    * Raise a page-fault exception, or:
-    * Set `pte.a` to 1 and, if the memory access is a store, also set `pte.d` to 1.
+7. If `pte.a` = 0, or if the memory access is a store and `pte.d` = 0, then either: (即是没有读过或者没有写过)
+    * Raise a page-fault exception, or: (软件触发缺页异常)
+    * Set `pte.a` to 1 and, if the memory access is a store, also set `pte.d` to 1. (正常访问，置 a=1 or a,d=1)
 8. The translation is successful. The translated physical address is given as follows:
     * `pa.pgoff` = `va.pgoff`.
     * if `i` > 0, then this is a superpage translation and `pa.ppn[i-1:0]` = `va.vpn[i-1:0]`.
