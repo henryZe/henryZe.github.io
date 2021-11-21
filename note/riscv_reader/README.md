@@ -447,17 +447,56 @@ S 模式提供了一种传统的虚拟内存系统，它将内存划分为固定
 ![p_pte](./10th/p_pte.png)
 
 Sv32 页表项（page-table entry，PTE）的布局，从左到右分别包含如下所述的域：
-* V 位决定了该页表项的其余部分是否有效（V = 1 时有效）。若 V = 0，则任何遍历到此页表项的虚址转换操作都会导致页错误。
-* R、W 和 X 位分别表示此页是否可以读取、写入和执行。如果这三个位都是 0，那么这个页表项是指向下一级页表的指针，否则它是页表树的一个叶节点。
-* U 位表示该页是否是用户页面。若 U = 0，则 U 模式不能访问此页面，但 S 模式可以。若 U = 1，则 U 模式下能访问这个页面，而 S 模式不能。
-* G 位表示这个映射是否对所有虚址空间有效，硬件可以用这个信息来提高地址转换的性能。这一位通常只用于属于操作系统的页面。
-* A 位表示自从上次 A 位被清除以来，该页面是否被访问过。
-* D 位表示自从上次清除 D 位以来页面是否被弄脏（例如被写入）。
-* RSW 域留给操作系统使用，它会被硬件忽略。
-* PPN 域包含物理页号，这是物理地址的一部分。若这个页表项是一个叶节点，那么 PPN 是转换后物理地址的一部分。否则 PPN 给出下一节页表的地址。
+* `V` 位决定了该页表项的其余部分是否有效（V = 1 时有效）。若 V = 0，则任何遍历到此页表项的虚址转换操作都会导致页错误。
+* `R`、`W` 和 `X` 位分别表示此页是否可以读取、写入和执行。如果这三个位都是 0，那么这个页表项是指向下一级页表的指针，否则它是页表树的一个叶节点。
+* `U` 位表示该页是否是用户页面。若 U = 0，则 U 模式不能访问此页面，但 S 模式可以。若 U = 1，则 U 模式下能访问这个页面，而 S 模式不能。
+* `G` 位表示这个映射是否对所有虚址空间有效，硬件可以用这个信息来提高地址转换的性能。这一位通常只用于属于操作系统的页面。
+* `A` 位表示自从上次 A 位被清除以来，该页面是否被访问过。
+* `D` 位表示自从上次清除 D 位以来页面是否被弄脏（例如被写入）。
+* `RSW` 域留给操作系统使用，它会被硬件忽略。
+* `PPN` 域包含物理页号，这是物理地址的一部分。若这个页表项是一个叶节点，那么 PPN 是转换后物理地址的一部分。否则 PPN 给出下一节页表的地址。
 
+![p_satp](./10th/p_satp.png)
 
+`satp` (Supervisor Address Translation and Protection)，监管者地址转换和保护的 S模式控制状态寄存器控制了分页系统。
 
+![p_trans](./10th/p_trans.png)
+
+va 到 pa 转换的完整算法:
+1. Let `a` be `satp.ppn` * PAGESIZE, and let `i` = LEVELS - 1.
+2. Let `pte` be the value of the PTE at address `a` + `va.vpn[i]` * PTESIZE.
+3. If `pte.v` = 0, or if `pte.r` = 0 and `pte.w` = 1, stop and raise a page-fault exception.
+4. Otherwise, the PTE is valid. If `pte.r` = 1 or `pte.x` = 1, go to step 5. Otherwise, this PTE is a pointer to the next level of the page table. Let `i` = `i` - 1. If `i` < 0, stop and raise a page-fault exception. Otherwise, let `a` = `pte.ppn` * PAGESIZE and go to step 2.
+5. A leaf PTE has been found. Determine if the requested memory access is allowed by the `pte.r`, `pte.w`, `pte.x`, and `pte.u` bits, given the current privilege mode and the value of the `SUM` and `MXR` fields of the `mstatus` register. If not, stop and raise a page-fault exception.
+6. If `i` > 0 and `pa.ppn[i-1:0]` != 0, this is a misaligned superpage; stop and raise a page-fault exception.
+7. If `pte.a` = 0, or if the memory access is a store and `pte.d` = 0, then either:
+    * Raise a page-fault exception, or:
+    * Set `pte.a` to 1 and, if the memory access is a store, also set `pte.d` to 1.
+8. The translation is successful. The translated physical address is given as follows:
+    * `pa.pgoff` = `va.pgoff`.
+    * if `i` > 0, then this is a superpage translation and `pa.ppn[i-1:0]` = `va.vpn[i-1:0]`.
+    * `pa.ppn[LEVELS-1:i]` = `pte.ppn[LEVELS-1:i]`.
+
+**mstatus register bit**
+> The MXR (Make eXecutable Readable) bit modifies the privilege with which loads access virtual memory. When MXR=0, only loads from pages marked readable (R=1) will succeed. When MXR=1, loads from pages marked either readable or executable (R=1 or X=1) will succeed.
+
+> The SUM (permit Supervisor User Memory access) bit modifies the privilege with which S-mode loads and stores access virtual memory. When SUM=0, S-mode memory accesses to pages that are accessible by U-mode (U=1) will fault. When SUM=1, these accesses are permitted.
+
+分页系统的所有内容。如果所有取指， load 和 store 操作都导致多次页表访问，那么分页会大大地降低性能！所有现代的处理器都用地址转换缓存（通常称为 TLB，全称为 Translation Lookaside Buffer）来减少这种开销。
+
+为了降低这个缓存本身的开销，大多数处理器不会让它时刻与页表保持一致。这意味着如果操作系统修改了页表，那么这个缓存会变得陈旧而不可用。 S 模式添加了另一条指令来解决这个问题。这条 `sfence.vma` 会通知处理器，软件可能已经修改了页表，于是处理器可以相应地刷新转换缓存。
+
+它需要两个可选的参数，这样可以缩小缓存刷新的范围。一个位于 rs1，它指示了页表哪个虚址对应的转换被修改了；另一个位于 rs2，它给出了被修改页表的进程的地址空间标识符（ASID）。如果两者都是 x0，便会刷新整个转换缓存。
+
+**多处理器中的地址转换缓存一致性**
+> sfence.vma仅影响执行当前指令的 hart的地址转换硬件。当 hart更改了另一个 hart正在使用的页表时，前一个 hart必须用处理器间中断来通知后一个 hart，他应该执行 sfence.vma 指令。
+
+### 10.7 结束语
+
+RISC-V 特权架构的模块化特性满足了各种系统的需求：
+* 十分精简的机器模式以低成本的特征支持裸机嵌入式应用。
+* 附加的用户模式和物理内存保护功能共同支持了更复杂的嵌入式系统中的多任务处理。
+* 最后，监管者模式和基于页面的虚拟内存提供了运行现代操作系统所必需的灵活性。
 
 ## 11 RISC-V 未来的可选扩展
 
