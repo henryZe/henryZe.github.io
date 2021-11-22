@@ -2,13 +2,15 @@
 
 # Zeng Heng's Blog
 
-> henryz_e@163.com
+> Henry is speaking...
 
 - Open Sources Project
 - Technical Blogs
 - Reading Notes
 - Online Courses
 - Daily Coding
+
+henryz_e@163.com
 
 [GitHub](https://github.com/henryZe)
 [Get Started](./README)

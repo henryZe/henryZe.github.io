@@ -42,6 +42,30 @@
 
 ![i_reg](./2nd/i_reg.png)
 
+ABI（application binary interface）：应用程序二进制接口
+
+| Register | ABI name | Description                    | saved in call |
+| -------- | -------- | ------------------------------ | ------------- |
+| x0       | zero     | hard wired 0                   | -             |
+| x1       | ra       | return address                 | no            |
+| x2       | sp       | stack pointer                  | yes           |
+| x3       | gp       | global pointer                 | -             |
+| x4       | tp       | thread pointer                 | -             |
+| x5-7     | t0-2     | temp register                  | no            |
+| x8       | s0/fp    | saved register / frame pointer | yes           |
+| x9       | s1       | saved register                 | yes           |
+| x10-11   | a0-1     | argument / return value        | no            |
+| x12-17   | a2-7     | argument                       | no            |
+| x18-27   | s2-11    | saved register                 | yes           |
+| x28-31   | t3-6     | temp register                  | no            |
+| -        | -        | -                              | -             |
+| f0-7     | ft0-7    | float temp register            | no            |
+| f8-9     | fs0-1    | float saved register           | yes           |
+| f10-11   | fa0-1    | float argument / return value  | no            |
+| f12-17   | fa2-7    | float argument                 | no            |
+| f18-27   | fs2-11   | float saved register           | yes           |
+| f28-31   | ft8-11   | float temp register            | no            |
+
 ### 2.4 整数计算
 
 * 算术指令 add, sub
