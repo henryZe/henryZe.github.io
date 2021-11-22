@@ -6,7 +6,6 @@
 
 - Open Sources Project
 - Technical Blogs
-- Reading Notes
 - Online Courses
 - Daily Coding
 
