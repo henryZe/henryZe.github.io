@@ -166,5 +166,3 @@ void mcs_spin_unlock(struct mcs_spinlock **lock, struct mcs_spinlock *node)
         1. 解决饥饿现象，引入排队机制 FIFO
     + q_spinlock:
         1. 在排队的机制上，理论上没有必要影响其他 CPU 的缓存，引入 `mcs spinlock` ，进一步减少 cache invalid 操作
-
-文章参考： https://zhuanlan.zhihu.com/p/133445693
