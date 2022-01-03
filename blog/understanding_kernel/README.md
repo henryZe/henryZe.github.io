@@ -1,8 +1,8 @@
-# 1 An Overview of the Unix Filesystem
+# 1 Introduction
 
-## Files
+## An Overview of the Unix Filesystem
 
-## Hard and Soft Links
+### Hard and Soft Links
 
 The same file may have several links included in the same directory or in different ones, so it may have several filenames.
 
@@ -14,7 +14,7 @@ To overcome these limitations, soft links (also called symbolic links) were intr
 
 Symbolic links are short files that contain an arbitrary pathname of another file. The pathname may refer to any file or directory located in any filesystem; it may even refer to a nonexistent file.
 
-## File Types
+### File Types
 
 * Regular file
 * Directory
@@ -24,7 +24,7 @@ Symbolic links are short files that contain an arbitrary pathname of another fil
 * Pipe and named pipe (also called FIFO)
 * Socket
 
-## File Descriptor and Inode
+### File Descriptor and Inode
 
 All information needed by the filesystem to handle a file is included in a data structure called an inode. Each file has its own inode, which the filesystem uses to identify the file.
 
