@@ -6,6 +6,8 @@
     - [RISC-V Reader](./blog/riscv_reader/README.md)
     - [mpu 方案](./blog/mpu/mpu_solution.md)
     - [RISC-V BTB](./blog/riscv_btb.md)
+- Linux 系列
+    - [Understanding the Linux Kernel](./blog/understand_kernel/README.md)
 - 其他
     - [SPINLOCK 前世今生](./blog/spinlock/spinlock_history.md)
     - [base64 编码](./blog/base64_coding.md)
