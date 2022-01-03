@@ -18,4 +18,4 @@
     - [数据结构](./course/data_struct/README)
 
 - [Daily Coding](./code/README)
-    - [leecode daily - 190](./code/190_reverseBits.md)
+    - [leetcode daily - 190](./code/190_reverseBits.md)
