@@ -5,7 +5,7 @@
 > Henry is speaking...
 
 - Open Sources Project
-- Technical Blogs
+- Blogs
 - Online Courses
 - Daily Coding
 

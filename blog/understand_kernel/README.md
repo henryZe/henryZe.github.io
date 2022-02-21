@@ -152,3 +152,6 @@ The kernel interacts with I/O devices by means of device drivers.
 * It is possible to write a device driver as a module that can be dynamically loaded in the kernel without requiring the system to be rebooted.
 
 # 2 Memory Addressing
+
+
+
