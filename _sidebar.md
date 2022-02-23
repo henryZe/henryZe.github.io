@@ -16,7 +16,6 @@
         - [SPINLOCK 前世今生](./blog/spinlock/spinlock_history.md)
         - [base64 编码](./blog/base64_coding.md)
     - 随笔
-        - [浪潮之巅](./blog/TopofWave/README.md)
         - [中国通史](./blog/China_history/README.md)
 
 - [Online Courses](course/README)

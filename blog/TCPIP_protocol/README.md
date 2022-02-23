@@ -191,7 +191,7 @@ TCP Flags 字段，是非常重要的功能标识，占 8 位:
 
 **四次挥手**
 
-![four_swing](./images/four_swing.jpg)
+![four_swing](./images/four_wave.jpg)
 
 #### 2.4.2 UDP 协议
 
