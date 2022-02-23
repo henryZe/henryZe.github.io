@@ -185,3 +185,52 @@ TCP Flags 字段，是非常重要的功能标识，占 8 位:
 **三次握手**
 
 ![three_shake](./images/three_shake.jpg)
+
+*为什么要使用三次握手来保证数据传输的可靠性？*
+> “握手” 的行为实际上为了告知收发双方自己的 ISN（Initial Sequence Number，初始化序号），如上图的 seq=x 或 seq=y，这个数值会被作为建立连接之后进行顺序数据传输的依据。从数据段首部的 Sequence Number 和 Acknowledgment Number 都占 32 位可知，seq 和 ack 的取值范围均为 [0, 2^32-1]，顺序循环使用。需要注意的是，seq 并非每次都是从 0 开始的，TCP 协议会以 4μs 一次的频率进行 ISN += 1 操作，以此来避免 TCP 重连时会出现同一条连接中存在两个及以上 seq 相同的包，最终导致顺序错乱。
+
+**四次挥手**
+
+![four_swing](./images/four_swing.jpg)
+
+#### 2.4.2 UDP 协议
+
+UDP（User Datagram Protocol，用户数据报协议），是一种无连接的非可靠传输层协议。UDP 不提供数据包分组、组装，不能对数据段进行排序，所以 UDP 数据段的首部非常简单。换句话说，当数据段发送出去之后，发送方是无法得知其是否完整且安全的到达了接收方的。这样的传输机制决定了它的最大优点就是快，同时也决定了它最大的缺点不可靠、不稳定。
+
+**UDP 数据段首部**
+
+![UDP_header](./images/UDP_header.jpg)
+
+* Source Port 源应用程序端口：发送方的应用程序端口
+* Destination Port 目的应用程序端口：接收方的应用程序端口
+* Length 长度：数据段的长度
+* Checksum 校验值：用于检查数据段在传输过程中是否出现差错
+
+### 2.5 应用层
+
+应用层是直接面向用户的，所以相对于数据传输的细节，应用层更加关注数据的表示形式，其*主要工作是定义数据格式并按照相应的格式要求进行数据解读*。
+
+应用层定义了各种各样的协议来规范数据格式，常见的有 HTTP(万维网), FTP(文件传输), SMTP(邮件) 等等。
+
+**HTTP（HyperText Transfer Protocol，超文本传输协议）**
+
+![http_format](./images/http_format.jpg)
+
+HTTP 规范了定义和解读数据格式的方式：
+* 在 Request Headers 中使用 Content-Type 表示客户端发送的数据格式类型，Accept 表示客户端期望接受的数据格式类型
+* 在 Response Headers 中使用 Content-Type 表示服务器端响应的数据格式类型
+* 通常 Request Accept 需要与 Response Content-Type 保持一致
+
+应用层无需关心数据的传输细节，这是分层设计带来的好处，用户完全可以在不了解底层协议的前提下使用应用层的众多协议来进行工作。
+
+## 3 总结
+
+物理介质层：是最底层的数据传输物理媒介
+数据链路层：通过 MAC 地址来定位本地子网中的主机
+网络层：通过 IP 地址来定位不同子网间的主机
+传输层：通过 Port 来定位到主机上的应用程序
+应用层：为主机上不同的应用程序提供服务
+
+**核心协议**
+
+![protocol_family](./images/protocol_family.jpg)
