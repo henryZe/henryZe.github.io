@@ -99,3 +99,17 @@
 
 ### 3.1 最大项和最小项表达式
 
+n 个变量组成的最小项：是一个与项（包含n个变量）
+
+n 个变量组成的最大项：是一个或项（包含n个变量）
+
+Mi = mi', 最大项等于对应的最小项取反
+
+最小项表达式 -- 标准与或式
+![minterm](./images/minterm.png)
+最大项表达式 -- 标准或与式
+![maxterm](./images/maxterm.png)
+
+![term_features](./images/term_features.png)
+
+![eq_trans](./images/eq_trans.png)
