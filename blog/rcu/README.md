@@ -27,5 +27,5 @@ rcu_dereference 引用内容
 `rcu_read_lock` & `rcu_read_unlock` 设立**grace period**临界区。
 
 > 参考
-
-https://lwn.net/Articles/609973/
+>
+> https://lwn.net/Articles/609973/
