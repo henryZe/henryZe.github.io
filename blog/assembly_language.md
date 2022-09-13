@@ -32,7 +32,7 @@ ret | popl %eip
 
 > Stack grows down
 
-## GCC calling conventions for JOS
+## GCC calling conventions
 
 * Saved %ebp is form a chain, which can help to walk stack.
 * Arguments and locals at fixed offsets from %ebp.
@@ -105,6 +105,24 @@ g:
     ret
 ~~~
 
+## ABI Registers
+
+Register    | Callee Save | Description
+--          | --          | --
+%rax	    |no|	result register, also used in idiv and imul
+%rbx	    |yes|	miscellaneous register
+%rcx	    |no|	fourth argument register
+%rdx	    |no|	third argument register, also idiv and imul
+%rsp	    |no|	stack pointer
+%rbp	    |yes|	frame pointer
+%rsi	    |no|	second argument register
+%rdi	    |no|	first argument register
+%r8	        |no|	fifth argument register
+%r9	        |no|	sixth argument register
+%r10	    |no|	miscellaneous register
+%r11	    |no|	miscellaneous register
+%r12~%15	|yes|	miscellaneous registers
+
 ## iret Instruction
 
 * The `iret` instruction pops the return instruction pointer, return code segment selector, and EFLAGS image from the stack to the `EIP`, `CS`, and `EFLAGS` registers, respectively, and then resumes execution of the interrupted program or procedure.
@@ -134,7 +152,7 @@ struct Trapframe {
 } __attribute__((packed));
 ~~~
 
-## packed attribute
+### packed attribute
 
 * packed: 数据结构不作对齐处理
 
