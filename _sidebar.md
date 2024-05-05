@@ -1,4 +1,5 @@
 - [Open Sources](project/README)
+    - [Toycc Compiler](./project/toycc/README)
     - [Toynix Kernel](./project/toynix/README)
 
 - [Blogs](./blog/README)
